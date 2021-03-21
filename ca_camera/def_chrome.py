@@ -148,9 +148,13 @@ def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
     out_keyword = defaultdict(list)
     start_time = time.time()
     print('ループ開始')
+    page = 0
     while True:
         in_keyword,out_keyword,sign = adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title_out_pattern)
         if sign:
+            break
+        page += 1
+        if page == 9:
             break
         next_page(driver)  
         print('途中１-ネクストページ')
