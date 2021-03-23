@@ -1,14 +1,14 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block head %}
-<link rel='stylesheet' href="{% static 'home/css/style_index.css' %}">
+<link rel='stylesheet' href="{% static 'home/css/style_list.css' %}">
 {% endblock %}
 {% block content %}
 <main>
     {% if categories %}
     {% for category in categories %}
     <div class="item_title">
-        <div class="title_card"><a href="{{ category.url }}">{{ category.name }}</a></div>
+        <div class="title_card"><a href="{{ category.url }}" target="_blank">{{ category.name }}</a></div>
     </div>
     {% endfor %}
     {% endif %}

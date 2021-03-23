@@ -18,4 +18,6 @@ urlpatterns = [
     path('celery_test/', views.celery_test, name='celery_test'),
     path('contact', views.contact, name='contact'), 
     path('contact/done', views.done, name='done'),
+    path('search_result', views.search_result, name='search_result'),
+    path('preturn', views.preturn, name="preturn"),
 ]

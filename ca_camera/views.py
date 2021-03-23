@@ -16,6 +16,12 @@ from celery.result import AsyncResult
 from config.tasks import form_celery, reload_celery, add
 
 def index(request):
+    return render(request, 'ca_camera/index.html')
+    
+def preturn(request):
+    return render(request, 'ca_camera/preturn.html')
+
+def search_result(request):
     items = Wantoitem.objects.all().order_by('maker_name')
     maker_list = Item_maker.objects.all()
     query = request.GET.get('query')
@@ -26,7 +32,7 @@ def index(request):
         ).distinct()
         maker_lists = items.values_list('maker_name__name', flat=True)
         maker_list = maker_list.filter(name__in=maker_lists)
-    return render(request, 'ca_camera/index.html', {
+    return render(request, 'ca_camera/search_result.html', {
          'items':items,
          'maker_list':maker_list
         })
