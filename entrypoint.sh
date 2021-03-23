@@ -21,7 +21,7 @@ python3 manage.py migrate --fake-initial
 # python3 manage.py createsuperuser --noinput
 cd ca_camera
 ls -l
-cd pattern
+cd migrations
 ls -l
 cd /workspace
 
