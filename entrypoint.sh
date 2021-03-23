@@ -12,17 +12,12 @@ then
 fi
 
 # python3 manage.py flush --no-input
-
-cd ca_camera
-ls -l
-cd migrations
-rm -rf 0001_initial.py
-ls -l
-cd /workspace
-
+python3 manage.py showmigrations
+python3 manage.py migrate --fake ca_camera zero
+python3 manage.py showmigrations
 python3 manage.py makemigrations
 python3 manage.py migrate 
-python3 manage.py migrate --fake
+python3 manage.py showmigrations
 # DJANGO_SUPERUSER_USERNAME=$DJANGO_SUPERUSER_USERNAME \
 # DJANGO_SUPERUSER_PASSWORD=$DJANGO_SUPERUSER_PASSWORD \
 # DJANGO_SUPERUSER_EMAIL=$DJANGO_SUPERUSER_EMAIL \
