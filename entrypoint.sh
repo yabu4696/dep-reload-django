@@ -14,8 +14,7 @@ fi
 # python3 manage.py flush --no-input
 
 python3 manage.py makemigrations
-python3 manage.py migrate
-
+python3 manage.py migrate --fake-initial
 # DJANGO_SUPERUSER_USERNAME=$DJANGO_SUPERUSER_USERNAME \
 # DJANGO_SUPERUSER_PASSWORD=$DJANGO_SUPERUSER_PASSWORD \
 # DJANGO_SUPERUSER_EMAIL=$DJANGO_SUPERUSER_EMAIL \
