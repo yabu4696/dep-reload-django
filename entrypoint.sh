@@ -13,11 +13,11 @@ fi
 
 # python3 manage.py flush --no-input
 python3 manage.py showmigrations
-python3 manage.py migrate --fake admin zero
-python3 manage.py migrate --fake auth zero
-python3 manage.py migrate --fake contenttypes zero
-python3 manage.py migrate --fake django_celery_results zero
-python3 manage.py migrate --fake sessions zero
+python3 manage.py migrate admin zero
+python3 manage.py migrate auth zero
+python3 manage.py migrate contenttypes zero
+python3 manage.py migrate django_celery_results zero
+python3 manage.py migrate sessions zero
 python3 manage.py showmigrations
 python3 manage.py makemigrations
 python3 manage.py migrate 
