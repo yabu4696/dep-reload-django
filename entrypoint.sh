@@ -11,15 +11,21 @@ then
     echo "PostgreSQL started"
 fi
 
-python3 manage.py flush --no-input
+# python3 manage.py flush --no-input
+python3 manage.py showmigrations
+python3 manage.py migrate --fake admin zero
+python3 manage.py migrate --fake auth zero
+python3 manage.py migrate --fake contenttypes zero
+python3 manage.py migrate --fake django_celery_results zero
+python3 manage.py migrate --fake sessions zero
 python3 manage.py showmigrations
 python3 manage.py makemigrations
 python3 manage.py migrate 
 python3 manage.py showmigrations
-DJANGO_SUPERUSER_USERNAME=$DJANGO_SUPERUSER_USERNAME \
-DJANGO_SUPERUSER_PASSWORD=$DJANGO_SUPERUSER_PASSWORD \
-DJANGO_SUPERUSER_EMAIL=$DJANGO_SUPERUSER_EMAIL \
-python3 manage.py createsuperuser --noinput
+# DJANGO_SUPERUSER_USERNAME=$DJANGO_SUPERUSER_USERNAME \
+# DJANGO_SUPERUSER_PASSWORD=$DJANGO_SUPERUSER_PASSWORD \
+# DJANGO_SUPERUSER_EMAIL=$DJANGO_SUPERUSER_EMAIL \
+# python3 manage.py createsuperuser --noinput
 cd ca_camera
 ls -l
 cd migrations
