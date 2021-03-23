@@ -22,6 +22,7 @@ cd /workspace
 
 python3 manage.py makemigrations
 python3 manage.py migrate 
+python3 manage.py migrate --fake
 # DJANGO_SUPERUSER_USERNAME=$DJANGO_SUPERUSER_USERNAME \
 # DJANGO_SUPERUSER_PASSWORD=$DJANGO_SUPERUSER_PASSWORD \
 # DJANGO_SUPERUSER_EMAIL=$DJANGO_SUPERUSER_EMAIL \
