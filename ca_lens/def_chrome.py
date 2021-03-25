@@ -5,6 +5,7 @@ import urllib.request as req
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 import time 
 import re
 import requests
@@ -71,9 +72,8 @@ def get_title(url):
     # os.environ['CURL_CA_BUNDLE'] = ''
     # ssl_path = '/usr/local/lib/python3.8/dist-packages/certifi/cacert.pem'
     ssl_path = certifi.where()
-    url_info = requests.get(url,verify=ssl_path,headers=headers,timeout=10)
+    url_info = requests.get(url,verify=ssl_path,headers=headers,timeout=3)
     print('non timeout')
-    # print(url_info.raise_for_status())
     url_html = BeautifulSoup(url_info.content, "html.parser")
     print('途中１-スクレイピング実行')
     title = url_html.find('title')
@@ -122,6 +122,10 @@ def adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title
             except requests.exceptions.SSLError:
                 print('sslerror')
                 continue
+            except Exception as e:
+                print('timeout')
+                print(e)
+                continue
             print('途中１-タイトル取得')
             if (len(title) > 255) or (len(url) > 200) or (len(ogp_img) > 200) or (not ogp_img):
                 continue
@@ -159,7 +163,11 @@ def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
         page += 1
         if page == 9:
             break
-        next_page(driver)  
+        try:
+            next_page(driver)  
+        except NoSuchElementException:
+            print('ページなし')
+            break
         print('途中１-ネクストページ')
         if time.time() - start_time > 300:
             print('timeout')
