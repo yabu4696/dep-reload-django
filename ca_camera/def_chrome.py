@@ -71,7 +71,7 @@ def get_title(url):
     # os.environ['CURL_CA_BUNDLE'] = ''
     # ssl_path = '/usr/local/lib/python3.8/dist-packages/certifi/cacert.pem'
     ssl_path = certifi.where()
-    url_info = requests.get(url,verify=ssl_path,headers=headers,timeout=10)
+    url_info = requests.get(url,verify=ssl_path,headers=headers,timeout=3)
     print('non timeout')
     url_html = BeautifulSoup(url_info.content, "html.parser")
     print('途中１-スクレイピング実行')
@@ -160,7 +160,7 @@ def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
         if sign:
             break
         page += 1
-        if page == 9:
+        if page == 8:
             break
         next_page(driver)  
         print('途中１-ネクストページ')
