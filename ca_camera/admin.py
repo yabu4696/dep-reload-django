@@ -1,21 +1,18 @@
 from django.contrib import admin
 
 from .models import Item_maker, Tag, Wantoitem
-
-# class ContentImageInline(admin.TabularInline):
-#     model = ContentImage
-#     extra = 1
+from adminsortable.admin import SortableAdmin
 
 
-# class PostAdmin(admin.ModelAdmin):
-#     inlines = [
-#         ContentImageInline,
-#     ]
+class Item_makerAdmin(SortableAdmin):
+    list_display = ('name',)
+    list_display_links = ('name',)
 
-# class WantoitemAdmin(admin.ModelAdmin):
-#     fields = ('item_name', 'maker_name', 'tag', 'created_at', 'updated_at', 'slug')
-#     readonly_fields = ('created_at', 'updated_at')
+class WantoitemAdmin(SortableAdmin):
+    list_display = ('item_name','maker_name')
+    list_display_links = ('item_name',)
 
-admin.site.register(Item_maker)
+admin.site.register(Item_maker, Item_makerAdmin)
 admin.site.register(Tag)
-admin.site.register(Wantoitem)
+# admin.site.register(Wantoitem)
+admin.site.register(Wantoitem, WantoitemAdmin)
