@@ -71,7 +71,7 @@ def get_title(url):
     # os.environ['CURL_CA_BUNDLE'] = ''
     # ssl_path = '/usr/local/lib/python3.8/dist-packages/certifi/cacert.pem'
     ssl_path = certifi.where()
-    url_info = requests.get(url,verify=ssl_path,headers=headers,timeout=3)
+    url_info = requests.get(url,verify=ssl_path,headers=headers,timeout=10)
     print('non timeout')
     # print(url_info.raise_for_status())
     url_html = BeautifulSoup(url_info.content, "html.parser")
