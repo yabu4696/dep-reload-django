@@ -12,11 +12,30 @@ from django.core.mail import BadHeaderError, EmailMessage
 from . import def_chrome 
 from urllib.parse import urlparse
 
+from celery.result import AsyncResult
+from config.tasks import form_celery, reload_celery, add
+
 def index(request):
     return render(request, 'ca_lens/index.html')
-
+    
 def preturn(request):
     return render(request, 'ca_lens/preturn.html')
+
+def search_result(request):
+    items = Wantoitem.objects.all().order_by('maker_name')
+    maker_list = Item_maker.objects.all()
+    query = request.GET.get('query')
+    if query:
+        items = items.filter(
+        Q(item_name__icontains=query)|
+        Q(maker_name__name__icontains=query)
+        ).distinct()
+        maker_lists = items.values_list('maker_name__name', flat=True)
+        maker_list = maker_list.filter(name__in=maker_lists)
+    return render(request, 'ca_lens/search_result.html', {
+         'items':items,
+         'maker_list':maker_list
+        })
     
 def detail(request, slug):
     item = get_object_or_404(Wantoitem, slug=slug)
@@ -41,8 +60,6 @@ def maker_detail(request, slug):
         'items':items,
         'maker':maker,
         })
-
-from config.tasks import form_celery
 
 def form(request):
     if not request.user.is_superuser:
@@ -76,7 +93,6 @@ def delete(request):
             items = Wantoitem.objects.all()
             return render(request, 'ca_lens/delete.html', {'items':items})
 
-from config.tasks import reload_celery
 
 def reload(request):
     if not request.user.is_superuser:
@@ -84,6 +100,17 @@ def reload(request):
     else:
         if request.method == 'POST':
             item_pks = request.POST.getlist('reload') 
+            # reload_items = Wantoitem.objects.filter(pk__in=item_pks)
+            # for item in reload_items:
+            #     Main.objects.filter(wantoitem=item).delete()
+            #     Sub.objects.filter(wantoitem=item).delete()
+            #     in_keyword,out_keyword = item.scraping()
+            #     for main_url,main_list in in_keyword.items():
+            #         Main.objects.create(wantoitem=item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
+            #     for sub_url,sub_list in out_keyword.items():
+            #         Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
+            #     item.save()
+            # item_pks=tuple(item_pks)
             reload_celery.apply_async(item_pks)
             return redirect('ca_lens:reload')
         else:
@@ -100,22 +127,6 @@ def reload_one(request, slug):
             return redirect('ca_lens:detail', slug=slug)
         else:
             return redirect('ca_lens:detail', slug=slug)
-
-def search_result(request):
-    items = Wantoitem.objects.all().order_by('maker_name')
-    maker_list = Item_maker.objects.all()
-    query = request.GET.get('query')
-    if query:
-        items = items.filter(
-        Q(item_name__icontains=query)|
-        Q(maker_name__name__icontains=query)
-        ).distinct()
-        maker_lists = items.values_list('maker_name__name', flat=True)
-        maker_list = maker_list.filter(name__in=maker_lists)
-    return render(request, 'ca_lens/search_result.html', {
-         'items':items,
-         'maker_list':maker_list
-        })
 
 def edit(request, slug):
     if not request.user.is_superuser:
@@ -149,6 +160,8 @@ def exclusion(request,slug):
             exec_list_main = Main.objects.filter(pk__in=main_pks)
             for main in exec_list_main:
                 domain_name = urlparse(main.main_url).netloc
+                if 'www' in domain_name:
+                    domain_name = domain_name.replace('www', '')
                 with open('./ca_lens/pattern/except_sub_list.txt', mode='a') as f:
                     f.write('\n'+domain_name)
             exec_list_main.delete()
@@ -225,16 +238,12 @@ def done(request):
 #     return render(request,'ca_lens/rayout_index.html')
 
 
-# from celery.result import AsyncResult
+def celery_test(request):
+	task_id = add.delay(5, 5)
 
-# from config.tasks import add
+	result = AsyncResult(task_id)
+	print('result:', result, ' : ', result.state, ' : ', result.ready())
 
-# def celery_test(request):
-# 	task_id = add.delay(5, 5)
+	context = {'result': result}
 
-# 	result = AsyncResult(task_id)
-# 	print('result:', result, ' : ', result.state, ' : ', result.ready())
-
-# 	context = {'result': result}
-
-# 	return render(request, 'ca_lens/celery-test.html', context)
+	return render(request, 'ca_lens/celery-test.html', context)
