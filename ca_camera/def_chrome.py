@@ -5,6 +5,7 @@ import urllib.request as req
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 import time 
 import re
 import requests
@@ -160,9 +161,13 @@ def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
         if sign:
             break
         page += 1
-        if page == 8:
+        if page == 9:
             break
-        next_page(driver)  
+        try:
+            next_page(driver)  
+        except NoSuchElementException:
+            print('ページなし')
+            break
         print('途中１-ネクストページ')
         if time.time() - start_time > 300:
             print('timeout')
