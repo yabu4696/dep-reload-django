@@ -108,6 +108,9 @@ def adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title
     for elem in class_elems:
         a_tag = elem.find_element_by_tag_name("a")
         url = a_tag.get_attribute("href")
+        if '.pdf' in url:
+            print('pdf除去')
+            continue
         domain_name = urlparse(url).netloc
         print('途中１-ドメイン取得')
         if not bool(url_pattern.search(url)):
