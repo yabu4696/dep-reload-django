@@ -13,7 +13,7 @@ from . import def_chrome
 from urllib.parse import urlparse
 
 from celery.result import AsyncResult
-from config.tasks import form_celery, reload_celery, add
+from config.tasks import camera_form_celery, camera_reload_celery, add
 
 def index(request):
     return render(request, 'ca_camera/index.html')
@@ -75,7 +75,7 @@ def form(request):
                 #     Main.objects.create(wantoitem=new_item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
                 # for sub_url,sub_list in out_keyword.items():
                 #     Sub.objects.create(wantoitem=new_item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
-                form_celery.apply_async()
+                camera_form_celery.apply_async()
             return redirect('ca_camera:index')
         else:
             form = WantoitemForm()
@@ -111,7 +111,7 @@ def reload(request):
             #         Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
             #     item.save()
             # item_pks=tuple(item_pks)
-            reload_celery.apply_async(item_pks)
+            camera_reload_celery.apply_async(item_pks)
             return redirect('ca_camera:reload')
         else:
             items = Wantoitem.objects.all().order_by('maker_name')
