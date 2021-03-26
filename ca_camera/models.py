@@ -42,7 +42,7 @@ class Wantoitem(SortableMixin):
         driver = def_chrome.make_driver()
         print('途中１-ドライバ初期設定')
         driver.get("https://google.com")
-        kw_in_title_path = '/workspace/ca_camera/pattern/kw_in_title.txt'
+        kw_in_title_path = '/workspace/ca_camera/pattern/camera_kw_in_title.txt'
         kw_out_title_path = '/workspace/ca_camera/pattern/kw_out_title.txt'
         kw_in_list = def_chrome.kw_in_title(kw_in_title_path)
         kw_out_list = def_chrome.kw_out_title(kw_out_title_path)
