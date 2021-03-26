@@ -19,6 +19,7 @@ def camera_form_celery():
 @shared_task
 def camera_reload_celery(*args):
     reload_items = Wantoitem.objects.filter(pk__in=args)
+    print(reload_items)
     print('処理開始')
     for item in reload_items:
         Main.objects.filter(wantoitem=item).delete()
